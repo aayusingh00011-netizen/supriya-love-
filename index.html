@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday Supriya 💖</title>
+  <style>
+    * { box-sizing: border-box; font-family: 'Poppins', system-ui, sans-serif; }
+    body {
+      margin: 0; min-height: 100vh;
+      background: radial-gradient(circle at top, #ffdee9, #b5fffc);
+      overflow-x: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 28px;
+      padding: 28px 24px;
+      max-width: 420px; width: 100%;
+      margin: 16px;
+      text-align: center;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.18);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    h1 { font-size: 2rem; margin-bottom: 8px; }
+    h2 { font-size: 1.2rem; font-weight: 500; margin-top: 0; }
+    p { font-size: 1rem; line-height: 1.6; }
+
+    button {
+      margin-top: 14px;
+      padding: 12px 22px;
+      border: none;
+      border-radius: 999px;
+      font-size: 1rem;
+      cursor: pointer;
+      background: linear-gradient(135deg, #ff7eb3, #ff758c);
+      color: #fff;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .cake {
+      font-size: 4rem;
+      animation: cakeBounce 2s infinite;
+      margin-bottom: 6px;
+    }
+
+    @keyframes cakeBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* LOCK SCREEN */
+    #lock {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, #ffdee9, #b5fffc);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    input {
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    #error { color: red; display: none; }
+
+    /* GALLERY */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .gallery img {
+      width: 100%;
+      border-radius: 14px;
+      object-fit: cover;
+      filter: blur(10px);
+      transition: filter 0.6s ease;
+    }
+
+    body.unlocked .gallery img { filter: blur(0); }
+
+    /* FIREWORKS */
+    .firework {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      animation: explode 1s ease-out;
+    }
+
+    @keyframes explode {
+      from { transform: scale(0); opacity: 1; }
+      to { transform: scale(6); opacity: 0; }
+    }
+
+    @media (max-width: 480px) {
+      h1 { font-size: 1.7rem; }
+      h2 { font-size: 1.05rem; }
+      p { font-size: 0.95rem; }
+      button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOCK SCREEN -->
+  <div id="lock">
+    <div class="card">
+      <h1>🔒 Private Gift</h1>
+      <p>Only Supriya can open this 💕</p>
+      <input id="password" type="password" placeholder="Enter secret word" />
+      <button onclick="unlock()">Open 💖</button>
+      <p id="error">Wrong password 😢</p>
+    </div>
+  </div>
+
+  <!-- MUSIC -->
+  <audio id="music" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- PAGE 1 -->
+  <div class="card" id="page1">
+    <div class="cake">🎂</div>
+    <h1>Happy Birthday</h1>
+    <h2>Supriya my Love 💖</h2>
+    <p style="margin:4px 0 10px;font-weight:500;">🎉 Born on: <strong>06 / 11 / 2010</strong></p>
+    <p>Every moment with you feels magical. Today is all about celebrating YOU 💕</p>
+    <button onclick="surprise()">Tap for Surprise 🎆</button>
+    <button onclick="nextPage()">Next 💌</button>
+  </div>
+
+  <!-- PAGE 2 -->
+  <div class="card" id="page2" style="display:none;">
+    <h1>💌 My Love Letter</h1>
+    <p id="letter"></p>
+    <button onclick="nextPage()">Next ➡️</button>
+  </div>
+
+  <!-- PAGE 3 -->
+  <div class="card" id="page3" style="display:none;">
+    <h1>📸 Our Memories</h1>
+    <div class="gallery">
+      <img src="supriya-1.jpg" alt="memory 1">
+      <img src="supriya-2.jpg" alt="memory 2">
+    </div>
+    <button onclick="nextPage()">Next ❤️</button>
+  </div>
+
+  <!-- PAGE 4 -->
+  <div class="card" id="page4" style="display:none;">
+    <h1>❤️ I Love You</h1>
+    <p>Supriya, my heart chose you and will always choose you.<br><br>Forever yours 💞</p>
+    <div style="font-size:3rem;">💖💖💖</div>
+  </div>
+
+  <script>
+    const SECRET = 'supriya';
+    let currentPage = 1;
+    const TOTAL_PAGES = 4;
+
+    const letterText = `My dearest Supriya,\n\nFrom the moment you entered my life, everything became brighter.\nYour smile is my favorite place, your voice my comfort.\nI am so grateful for every laugh, every memory, and every dream we share.\n\nHappy Birthday, my love. Today, tomorrow, and always — it’s you ❤️`;
+
+    function unlock() {
+      const val = document.getElementById('password').value.toLowerCase().trim();
+      if (val === SECRET) {
+        document.getElementById('lock').style.display = 'none';
+        document.body.classList.add('unlocked');
+        const music = document.getElementById('music');
+        music.muted = false;
+        music.play().catch(() => {});
+      } else {
+        document.getElementById('error').style.display = 'block';
+      }
+    } else {
+        document.getElementById('error').style.display = 'block';
+      }
+    }
+
+    function nextPage() {
+      const current = document.getElementById('page' + currentPage);
+      if (current) current.style.display = 'none';
+      if (currentPage < TOTAL_PAGES) currentPage++;
+      const next = document.getElementById('page' + currentPage);
+      if (next) next.style.display = 'block';
+      if (currentPage === 2) typeLetter();
+    }
+
+    function typeLetter() {
+      const el = document.getElementById('letter');
+      let i = 0;
+      el.innerHTML = '';
+      const timer = setInterval(() => {
+        el.innerHTML += letterText[i] === '\n' ? '<br>' : letterText[i];
+        i++;
+        if (i >= letterText.length) clearInterval(timer);
+      }, 40);
+    }
+
+    function surprise() {
+      for (let i = 0; i < 25; i++) firework();
+    }
+
+    function firework() {
+      const f = document.createElement('div');
+      f.className = 'firework';
+      f.style.left = Math.random() * 100 + 'vw';
+      f.style.top = Math.random() * 60 + 'vh';
+      f.style.backgroundColor = `hsl(${Math.random() * 360},100%,60%)`;
+      document.body.appendChild(f);
+      setTimeout(() => f.remove(), 1000);
+    }
+  </script>
+</body>
+</html>
