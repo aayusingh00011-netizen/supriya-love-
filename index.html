@@ -86,14 +86,48 @@ let page = 1;
 const letterText = 'My dearest Supriya,\nHappy Birthday my love ❤️\n— Aayu Singh';
 
 function unlock() {
-  if (document.getElementById('pass').value.toLowerCase() === SECRET) {
-    document.getElementById('lock').style.display = 'none';
-    document.body.classList.add('unlocked');
-    document.getElementById('page1').style.display = 'block';
-    document.getElementById('music').play().catch(() => {});
+  const passwordInput = document.getElementById('pass').value.trim().toLowerCase();
+  if (passwordInput === SECRET) {
+    document.getElementById('error').style.display = 'none';
+    startSequence();
   } else {
     document.getElementById('error').style.display = 'block';
   }
+}
+
+function startSequence() {
+  document.getElementById('lock').innerHTML = '<div class="card"><h2>❤️ Just a moment...</h2><h1 id="count">5</h1></div>';
+  let countdown = 5;
+  const timer = setInterval(() => {
+    countdown--;
+    document.getElementById('count').innerText = countdown;
+    if (countdown === 0) {
+      clearInterval(timer);
+      showCandle();
+    }
+  }, 1000);
+}
+
+function showCandle() {
+  document.getElementById('lock').innerHTML = '<div class="card" onclick="blowCandle()"><div id="candles" style="font-size:3rem">🕯️🕯️🕯️</div><h2>Tap to blow candles 💨</h2></div>';
+}
+
+function blowCandle() {
+  document.getElementById('candles').innerText = '💨✨';
+  setTimeout(showCake, 1200);
+}
+
+function showCake() {
+  document.getElementById('lock').innerHTML = '<div class="card" onclick="cutCake()"><div style="font-size:4rem">🎂</div><h2>Tap to cut the cake 🎉</h2></div>';
+}
+
+function cutCake() {
+  document.getElementById('cakeSound').play().catch(() => {});
+  setTimeout(() => {
+    document.getElementById('lock').style.display = 'none';
+    document.getElementById('page1').style.display = 'block';
+    document.getElementById('music').play().catch(() => {});
+  }, 1200);
 }
 
 function next() {
@@ -163,4 +197,9 @@ setInterval(() => {
   f.innerText = '🌸';
   f.style.left = Math.random() * 100 + 'vw';
   document.body.appendChild(f);
-  setTimeout
+  setTimeout(() => f.remove(), 6000);
+}, 500);
+</script>
+
+</body>
+</html>
