@@ -51,7 +51,37 @@ input{width:100%;padding:10px;border-radius:12px;border:1px solid #ccc;margin-to
 <div id="page4" class="card" style="display:none"><h1>❤️ I Love You</h1><p>You are my forever 💖</p><div class="proposal"><span class="teddy kneel">🧸</span><span class="ring">💍</span><span class="teddy kiss">🧸</span></div><button onclick="yesForever()">YES 💖</button><p>— Always Yours,<br>Aayu Singh</p><div style="margin-top:12px"><h3>🌸 Shiv & Parvati Ji 🌸</h3><p>Congratulations for your new journey 💐<br>May Mahadev bless you always 🕉️</p></div></div>
 <script>
 const SECRET="supriya";let page=1;const letterText="My dearest Supriya,\nHappy Birthday my love ❤️\n— Aayu Singh";
-function unlock(){if(pass.value===SECRET){lock.style.display="none";document.getElementById('page1').style.display='block';music.play().catch(()=>{});}else error.style.display='block'}
+function unlock(){
+  const val=document.getElementById('pass').value.trim().toLowerCase();
+  if(val===SECRET){
+    document.getElementById('error').style.display='none';
+    startSequence();
+  }else{
+    document.getElementById('error').style.display='block';
+  }
+}
+
+function startSequence(){
+  // show countdown
+  document.getElementById('lock').innerHTML=`<div class="card"><h2>❤️ Just a moment...</h2><h1 id="count">5</h1></div>`;
+  let n=5;
+  const t=setInterval(()=>{
+    n--;document.getElementById('count').innerText=n;
+    if(n===0){clearInterval(t);showCandle();}
+  },1000);
+}
+
+function showCandle(){
+  document.getElementById('lock').innerHTML=`<div class="card" onclick="blowCandle()"><div id="candles" style="font-size:3rem">🕯️🕯️🕯️</div><h2>Tap to blow candles 💨</h2></div>`;
+}
+
+function blowCandle(){
+  document.getElementById('candles').innerText='💨✨';
+  setTimeout(showCake,1200);
+}
+
+function showCake(){
+  document.getElementById('lock').innerHTML=`<div class="card" onclick="cutCake()">{if(pass.value===SECRET){lock.style.display="none";document.getElementById('page1').style.display='block';music.play().catch(()=>{});}else error.style.display='block'}
 function next(){document.getElementById('page'+page).style.display='none';page++;document.getElementById('page'+page).style.display='block';if(page===2)type();if(page===3)slideshow();}
 function type(){let i=0;letter.innerHTML='';let t=setInterval(()=>{letter.innerHTML+=letterText[i]==='\n'?'<br>':letterText[i];i++;if(i>=letterText.length)clearInterval(t)},40)}
 function slideshow(){const imgs=document.querySelectorAll('#slideshow img');let i=0;imgs[i].style.display='block';setInterval(()=>{imgs[i].style.display='none';i=(i+1)%imgs.length;imgs[i].style.display='block'},2500)}
