@@ -5,23 +5,42 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Happy Birthday Supriya 💖</title>
 <style>
-*{box-sizing:border-box;font-family:Poppins,system-ui,sans-serif}
-body{margin:0;min-height:100vh;background:radial-gradient(circle at top,#ffdee9,#b5fffc);display:flex;align-items:center;justify-content:center;overflow:hidden}
-.card{background:rgba(255,255,255,.95);border-radius:26px;padding:26px 22px;max-width:420px;width:100%;margin:16px;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,.2)}
-h1{font-size:2rem;margin:.4em 0}
-h2{font-size:1.2rem;margin:.3em 0}
-p{line-height:1.6}
-button{padding:12px 22px;border:none;border-radius:999px;background:linear-gradient(135deg,#ff7eb3,#ff758c);color:#fff;font-size:1rem;margin-top:12px;cursor:pointer}
-input{width:100%;padding:10px;border-radius:12px;border:1px solid #ccc;margin-top:8px}
-#lock{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:10}
-#error{color:red;display:none}
-.gallery{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.gallery img{width:100%;border-radius:14px;filter:blur(10px)}
-body.unlocked .gallery img{filter:blur(0)}
-.firework{position:fixed;width:8px;height:8px;border-radius:50%;animation:boom 1s ease-out}
-@keyframes boom{from{transform:scale(0);opacity:1}to{transform:scale(6);opacity:0}}
-.heart,.flower{position:fixed;top:-20px;pointer-events:none;animation:fall 6s linear}
-@keyframes fall{to{transform:translateY(110vh);opacity:0}}
+* { box-sizing: border-box; font-family: Poppins, system-ui, sans-serif; }
+body {
+  margin: 0; min-height: 100vh;
+  background: radial-gradient(circle at top, #ffdee9, #b5fffc);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 26px;
+  padding: 26px 22px;
+  max-width: 420px; width: 100%;
+  margin: 16px; text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+h1 { font-size: 2rem; margin: .4em 0; }
+h2 { font-size: 1.2rem; margin: .3em 0; }
+p { line-height: 1.6; }
+button {
+  padding: 12px 22px; border: none; border-radius: 999px;
+  background: linear-gradient(135deg, #ff7eb3, #ff758c);
+  color: #fff; font-size: 1rem; margin-top: 12px; cursor: pointer;
+}
+input {
+  width: 100%; padding: 10px; border-radius: 12px;
+  border: 1px solid #ccc; margin-top: 8px;
+}
+#lock { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 10; }
+#error { color: red; display: none; }
+.gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.gallery img { width: 100%; border-radius: 14px; filter: blur(10px); transition: .6s; }
+body.unlocked .gallery img { filter: blur(0); }
+.firework { position: fixed; width: 8px; height: 8px; border-radius: 50%; animation: boom 1s ease-out; }
+@keyframes boom { from { transform: scale(0); opacity: 1; } to { transform: scale(6); opacity: 0; } }
+.heart, .flower { position: fixed; top: -20px; pointer-events: none; animation: fall 6s linear; }
+@keyframes fall { to { transform: translateY(110vh); opacity: 0; } }
 </style>
 </head>
 <body>
@@ -63,7 +82,7 @@ body.unlocked .gallery img{filter:blur(0)}
 
 <div id="page3" class="card" style="display:none">
   <h1>📸 Memories</h1>
-  <div class="gallery">
+  <div class="gallery" id="slideshow">
     <img src="supriya-1.jpg">
     <img src="supriya-2.jpg">
   </div>
@@ -77,45 +96,36 @@ body.unlocked .gallery img{filter:blur(0)}
 
 <div id="page5" class="card" style="display:none">
   <h1>❤️ I Love You</h1>
-  <p>Congratulations for new journey 💐<br>— Shiv & Parvati Ji 🙏</p>
+  <p>Congratulations for your new journey 💐<br>— Shiv & Parvati Ji 🙏</p>
 </div>
 
 <script>
-const SECRET='supriya';
-let page=1;
-const letterText='My dearest Supriya,\nHappy Birthday my love ❤️\n— Aayu Singh';
+const SECRET = 'supriya';
+let page = 1;
+const letterText = 'My dearest Supriya,\nHappy Birthday my love ❤️\n— Aayu Singh';
 
-function unlock(){
-  if(document.getElementById('pass').value.toLowerCase()===SECRET){
-    document.getElementById('lock').style.display='none';
+function unlock() {
+  const val = document.getElementById('pass').value.trim().toLowerCase();
+  if (val === SECRET) {
+    document.getElementById('lock').style.display = 'none';
     document.body.classList.add('unlocked');
-    document.getElementById('page1').style.display='block';
-    document.getElementById('music').play().catch(()=>{});
-  }else document.getElementById('error').style.display='block';
+    countdown();
+  } else {
+    document.getElementById('error').style.display = 'block';
+  }
 }
 
-function next(){
-  document.getElementById('page'+page).style.display='none';
-  page++;
-  document.getElementById('page'+page).style.display='block';
-  if(page===2)typeLetter();
+function countdown() {
+  document.getElementById('lock').innerHTML = '<div class="card"><h2>❤️ Just a moment...</h2><h1 id="count">5</h1></div>';
+  let n = 5;
+  const t = setInterval(() => {
+    n--;
+    document.getElementById('count').innerText = n;
+    if (n === 0) {
+      clearInterval(t);
+      showCandle();
+    }
+  }, 1000);
 }
 
-function typeLetter(){
-  let i=0,el=document.getElementById('letter');el.innerHTML='';
-  const t=setInterval(()=>{el.innerHTML+=letterText[i]||'';i++;if(i>=letterText.length)clearInterval(t)},40);
-}
-
-function yesForever(){
-  document.getElementById('yesSong').play().catch(()=>{});
-  fireworks();
-  setTimeout(next,1000);
-}
-
-function fireworks(){for(let i=0;i<25;i++){let f=document.createElement('div');f.className='firework';f.style.left=Math.random()*100+'vw';f.style.top=Math.random()*60+'vh';f.style.background=`hsl(${Math.random()*360},100%,60%)`;document.body.appendChild(f);setTimeout(()=>f.remove(),1000);}}
-
-setInterval(()=>{let h=document.createElement('div');h.className='heart';h.innerText='💖';h.style.left=Math.random()*100+'vw';document.body.appendChild(h);setTimeout(()=>h.remove(),6000)},300);
-setInterval(()=>{let f=document.createElement('div');f.className='flower';f.innerText='🌸';f.style.left=Math.random()*100+'vw';document.body.appendChild(f);setTimeout(()=>f.remove(),6000)},500);
-</script>
-</body>
-</html>
+function showCandle()
